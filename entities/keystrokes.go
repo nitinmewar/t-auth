@@ -1,5 +1,12 @@
 package entities
 
+import (
+	"database/sql"
+	"time"
+
+	"github.com/lib/pq"
+)
+
 type KeystrokeProfile struct {
 	ID                int             `gorm:"column:user_id;primaryKey;autoIncrement"`
 	PID               sql.NullString  `gorm:"column:user_pid;unique;not null;type:varchar(40)"`
