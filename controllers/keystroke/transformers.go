@@ -1,4 +1,4 @@
-package auth
+package keystroke
 
 import (
 	"tauth/entities"
@@ -9,7 +9,7 @@ import (
 /* -------------------------------------------------------------------------- */
 /*                                  REGISTER                                  */
 /* -------------------------------------------------------------------------- */
-func registerSuccessRes(baseRes models.BaseResponse, user entities.Users) models.BaseResponse {
+func keystrokeSuccessRes(baseRes models.BaseResponse, user entities.Users) models.BaseResponse {
 	var res models.BaseResponse
 	var data authsvc.UserObject
 
@@ -18,22 +18,6 @@ func registerSuccessRes(baseRes models.BaseResponse, user entities.Users) models
 	data.Email = user.PrimaryEmail
 	data.CreatedAt = int(user.CreatedAt.Unix())
 	data.IsKeystrokeDone = user.IsKeystrokeCalculated
-
-	res.Data = data
-	res.Success = baseRes.Success
-	res.StatusCode = baseRes.StatusCode
-	res.Message = baseRes.Message
-
-	return res
-}
-
-/* -------------------------------------------------------------------------- */
-/*                               USERNAME CHECK                               */
-/* -------------------------------------------------------------------------- */
-func emailCheckResponse(baseRes models.BaseResponse, exist bool) models.BaseResponse {
-	var res models.BaseResponse
-	var data authsvc.EMailCheckResponse
-	data.Exist = exist
 
 	res.Data = data
 	res.Success = baseRes.Success

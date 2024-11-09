@@ -3,6 +3,7 @@ package keystrokesvc
 import (
 	"tauth/dbops/gorm/keystrokes"
 	"tauth/dbops/gorm/users"
+	"tauth/entities"
 	"tauth/models"
 
 	"github.com/gin-gonic/gin"
@@ -15,7 +16,7 @@ type KeyStrokeImpl struct {
 
 // interface.
 type Interface interface {
-	CreateKeyStroke(ctx *gin.Context, req RequestBody) (models.BaseResponse, error)
+	CreateKeyStroke(ctx *gin.Context, req RequestBody) (models.BaseResponse, entities.Users, error)
 }
 
 /* -------------------------------------------------------------------------- */

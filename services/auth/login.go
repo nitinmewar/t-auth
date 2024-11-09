@@ -25,13 +25,15 @@ func (h *AuthSvcImpl) LoginUser(ctx *gin.Context, req LoginObject) (models.BaseR
 		return res, user, err
 	}
 
-	// check password
-	err = h.checkPassword(ctx, req)
-	if err != nil {
-		res.Success = false
-		res.Message = "incorrect password"
-		res.StatusCode = http.StatusUnauthorized
-		return res, user, nil
+	if req.Password != "" {
+		// check password
+		err = h.checkPassword(ctx, req)
+		if err != nil {
+			res.Success = false
+			res.Message = "incorrect password"
+			res.StatusCode = http.StatusUnauthorized
+			return res, user, nil
+		}
 	}
 
 	// success response

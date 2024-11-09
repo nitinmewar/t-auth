@@ -20,6 +20,7 @@ type GormInterface interface {
 	GetUserDetailsEmail(ctx *gin.Context, email string) (entities.Users, error)
 	FindEmail(ctx *gin.Context, email string) (res bool, err error)
 	GetUserDetailsByPID(ctx *gin.Context, pid string) (entities.Users, error)
+	UpdateKeystrokeMetrics(ctx *gin.Context, pid string) (entities.Users, error)
 }
 
 /* -------------------------------------------------------------------------- */
@@ -85,6 +86,20 @@ func (r *usersGormImpl) GetUserDetailsEmail(ctx *gin.Context, email string) (ent
 	result := db.Where("primary_email = ?", email).
 		Scopes(dbops.DeletedScopes(ctx)).
 		Take(&user)
+	err := result.Error
+	if err != nil {
+		return user, err
+	}
+
+	return user, nil
+}
+
+func (r *usersGormImpl) UpdateKeystrokeMetrics(ctx *gin.Context, pid string) (entities.Users, error) {
+	var user entities.Users
+	db := r.DB.Session(&gorm.Session{})
+	result := db.Where("user_pid = ?", pid).
+		Scopes(dbops.DeletedScopes(ctx)).
+		Update("is_keystroke_calculated", true)
 	err := result.Error
 	if err != nil {
 		return user, err

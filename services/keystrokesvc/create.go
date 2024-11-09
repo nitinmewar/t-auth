@@ -8,9 +8,10 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func (h *KeyStrokeImpl) CreateKeyStroke(ctx *gin.Context, req RequestBody) (models.BaseResponse, error) {
+func (h *KeyStrokeImpl) CreateKeyStroke(ctx *gin.Context, req RequestBody) (models.BaseResponse, entities.Users, error) {
 	var res models.BaseResponse
 	var keystroke entities.KeystrokeProfile
+	var user entities.Users
 	var err error
 
 	// default response
@@ -32,7 +33,13 @@ func (h *KeyStrokeImpl) CreateKeyStroke(ctx *gin.Context, req RequestBody) (mode
 	// create a keystroke profile
 	keystroke, err = h.keyStrokeGorm.CreateKeyStroke(ctx, keystroke)
 	if err != nil {
-		return res, err
+		return res, user, err
+	}
+
+	// update user
+	user, err = h.userGorm.UpdateKeystrokeMetrics(ctx, req.UserPID)
+	if err != nil {
+		return res, user, err
 	}
 
 	// success response
@@ -40,7 +47,7 @@ func (h *KeyStrokeImpl) CreateKeyStroke(ctx *gin.Context, req RequestBody) (mode
 	res.Message = "metrics saved succesfully"
 	res.StatusCode = http.StatusOK
 
-	return res, err
+	return res, user, err
 }
 
 func average(items []float64) float64 {

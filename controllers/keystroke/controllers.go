@@ -15,11 +15,13 @@ func (h *keyStrokeHandler) CreateKeyStroke(ctx *gin.Context) {
 		return
 	}
 
-	res, err := h.keystrokeSvc.CreateKeyStroke(ctx, req)
+	res, user, err := h.keystrokeSvc.CreateKeyStroke(ctx, req)
 	if err != nil {
 		tautherrors.InternalServer(ctx, err.Error())
 		return
 	}
 
-	utils.ReturnJSONStruct(ctx, res)
+	result := keystrokeSuccessRes(res, user)
+
+	utils.ReturnJSONStruct(ctx, result)
 }
