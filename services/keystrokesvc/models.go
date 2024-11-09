@@ -1,11 +1,11 @@
 package keystrokesvc
 
-import "tauth/entities"
-
-var a entities.KeystrokeProfile
-
 type RequestBody struct {
-	UserPID    string     `json:"user_id"`
+	Data TypingMetrics `json:"data"`
+}
+
+type TypingMetrics struct {
+	UserPID    string     `json:"userPID"`
 	SampleText string     `json:"sampleText"`
 	InputText  string     `json:"inputText"`
 	Metrics    Metrics    `json:"metrics"`

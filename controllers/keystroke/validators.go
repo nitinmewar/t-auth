@@ -23,7 +23,7 @@ func validateKeystrokeReq(ctx *gin.Context) (keystrokesvc.RequestBody, error) {
 		return reqBody, err
 	}
 
-	if reqBody.UserPID == "" {
+	if reqBody.Data.UserPID == "" {
 		return reqBody, errors.New("user id is mandatory")
 	}
 

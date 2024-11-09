@@ -2,6 +2,8 @@ package authsvc
 
 import (
 	"net/http"
+	"tauth/database"
+	"tauth/dbops/gorm/keystrokes"
 	"tauth/entities"
 	"tauth/models"
 
@@ -25,6 +27,14 @@ func (h *AuthSvcImpl) LoginUser(ctx *gin.Context, req LoginObject) (models.BaseR
 		return res, user, err
 	}
 
+	db, _ := database.Connection()
+	keystrokeGorm := keystrokes.Gorm(db)
+
+	savedProfile, err := keystrokeGorm.GetKeyStrokeByUserPID(ctx, user.PID.String)
+	if err != nil {
+		return res, user, err
+	}
+
 	if req.Password != "" {
 		// check password
 		err = h.checkPassword(ctx, req)
@@ -34,12 +44,38 @@ func (h *AuthSvcImpl) LoginUser(ctx *gin.Context, req LoginObject) (models.BaseR
 			res.StatusCode = http.StatusUnauthorized
 			return res, user, nil
 		}
-	}
 
-	// success response
-	res.Success = true
-	res.Message = "login succcesfull"
-	res.StatusCode = http.StatusOK
+		// success response
+		res.Success = true
+		res.Message = "login succcesfull"
+		res.StatusCode = http.StatusOK
+
+		return res, user, nil
+	} else {
+		var keystroke entities.KeystrokeProfile
+		// map the data
+		keystroke.UserPID = req.TypingDNA.UserPID
+		keystroke.SampleText = req.TypingDNA.SampleText
+		keystroke.TextLength = len(req.TypingDNA.SampleText)
+		keystroke.DwellTimes = req.TypingDNA.Metrics.RawMetrics.DwellTimes
+		keystroke.FlightTimes = req.TypingDNA.Metrics.RawMetrics.FlightTimes
+		keystroke.AverageDwellTime = average(req.TypingDNA.Metrics.RawMetrics.DwellTimes)
+		keystroke.AverageFlightTime = average(req.TypingDNA.Metrics.RawMetrics.FlightTimes)
+		keystroke.WordsPerMinute = float64(req.TypingDNA.Metrics.WPM)
+		keystroke.DeviceInfo = req.TypingDNA.DeviceInfo.Browser
+		keystroke.CreatedFrom = ctx.ClientIP()
+
+		match, _ := compareKeystrokeProfiles(savedProfile, keystroke)
+
+		if match {
+			// success response
+			res.Success = true
+			res.Message = "login succcesfull"
+			res.StatusCode = http.StatusOK
+
+			return res, user, nil
+		}
+	}
 
 	return res, user, err
 }

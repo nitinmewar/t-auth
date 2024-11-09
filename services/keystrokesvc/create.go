@@ -19,15 +19,15 @@ func (h *KeyStrokeImpl) CreateKeyStroke(ctx *gin.Context, req RequestBody) (mode
 	res.StatusCode = http.StatusInternalServerError
 
 	// map the data
-	keystroke.UserPID = req.UserPID
-	keystroke.SampleText = req.SampleText
-	keystroke.TextLength = len(req.SampleText)
-	keystroke.DwellTimes = req.Metrics.RawMetrics.DwellTimes
-	keystroke.FlightTimes = req.Metrics.RawMetrics.FlightTimes
-	keystroke.AverageDwellTime = average(req.Metrics.RawMetrics.DwellTimes)
-	keystroke.AverageFlightTime = average(req.Metrics.RawMetrics.FlightTimes)
-	keystroke.WordsPerMinute = float64(req.Metrics.WPM)
-	keystroke.DeviceInfo = req.DeviceInfo.Browser
+	keystroke.UserPID = req.Data.UserPID
+	keystroke.SampleText = req.Data.SampleText
+	keystroke.TextLength = len(req.Data.SampleText)
+	keystroke.DwellTimes = req.Data.Metrics.RawMetrics.DwellTimes
+	keystroke.FlightTimes = req.Data.Metrics.RawMetrics.FlightTimes
+	keystroke.AverageDwellTime = average(req.Data.Metrics.RawMetrics.DwellTimes)
+	keystroke.AverageFlightTime = average(req.Data.Metrics.RawMetrics.FlightTimes)
+	keystroke.WordsPerMinute = float64(req.Data.Metrics.WPM)
+	keystroke.DeviceInfo = req.Data.DeviceInfo.Browser
 	keystroke.CreatedFrom = ctx.ClientIP()
 
 	// create a keystroke profile
@@ -37,7 +37,7 @@ func (h *KeyStrokeImpl) CreateKeyStroke(ctx *gin.Context, req RequestBody) (mode
 	}
 
 	// update user
-	user, err = h.userGorm.UpdateKeystrokeMetrics(ctx, req.UserPID)
+	user, err = h.userGorm.UpdateKeystrokeMetrics(ctx, req.Data.UserPID)
 	if err != nil {
 		return res, user, err
 	}
