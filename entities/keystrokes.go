@@ -15,7 +15,7 @@ type KeystrokeProfile struct {
 	TextLength        int             `gorm:"column:text_length;not null"`
 	DwellTimes        pq.Float64Array `gorm:"column:dwell_times;type:float[]"`
 	FlightTimes       pq.Float64Array `gorm:"column:flight_times;type:float[]"`
-	AverageDwellTime  float64         `gorm:"column:average dwell_time;type:decimal(10,3)"`
+	AverageDwellTime  float64         `gorm:"column:average_dwell_time;type:decimal(10,3)"`
 	AverageFlightTime float64         `gorm:"column:average_flight_time;type:decimal(10,3)"`
 	TotalTime         float64         `gorm:"column:total_time;type:decimal(10,3)"`
 	WordsPerMinute    float64         `gorm:"column:words_per_minute;type:decimal(10,3)"`

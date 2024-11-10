@@ -99,7 +99,8 @@ func (r *usersGormImpl) UpdateKeystrokeMetrics(ctx *gin.Context, pid string) (en
 	db := r.DB.Session(&gorm.Session{})
 	result := db.Model(&user).Where("user_pid = ?", pid).
 		Scopes(dbops.DeletedScopes(ctx)).
-		Update("is_keystroke_calculated", true)
+		Update("is_keystroke_calculated", true).
+		Take(&user)
 	err := result.Error
 	if err != nil {
 		return user, err
