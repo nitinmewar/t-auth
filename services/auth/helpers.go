@@ -2,6 +2,7 @@ package authsvc
 
 import (
 	"errors"
+	"fmt"
 	"math"
 	"tauth/entities"
 )
@@ -62,6 +63,11 @@ func compareKeystrokeProfiles(storedProfile, loginProfile entities.KeystrokeProf
 func validateProfiles(stored, login entities.KeystrokeProfile) error {
 	if len(stored.DwellTimes) == 0 || len(stored.FlightTimes) == 0 ||
 		len(login.DwellTimes) == 0 || len(login.FlightTimes) == 0 {
+		fmt.Println(len(stored.DwellTimes), len(stored.FlightTimes))
+
+		fmt.Println("------------------------------------------------")
+		fmt.Println(len(login.DwellTimes), len(login.FlightTimes))
+
 		return errors.New("empty keystroke profiles")
 	}
 
