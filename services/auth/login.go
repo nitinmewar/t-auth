@@ -65,8 +65,10 @@ func (h *AuthSvcImpl) LoginUser(ctx *gin.Context, req LoginObject) (models.BaseR
 		keystroke.DeviceInfo = req.TypingDNA.DeviceInfo.Browser
 		keystroke.CreatedFrom = ctx.ClientIP()
 
-		match, _ := compareKeystrokeProfiles(savedProfile, keystroke)
-
+		match, _, err := compareKeystrokeProfiles(savedProfile, keystroke)
+		if err != nil {
+			return res, user, err
+		}
 		if match {
 			// success response
 			res.Success = true
@@ -74,7 +76,15 @@ func (h *AuthSvcImpl) LoginUser(ctx *gin.Context, req LoginObject) (models.BaseR
 			res.StatusCode = http.StatusOK
 
 			return res, user, nil
+		} else {
+			// success response
+			res.Success = true
+			res.Message = "login failed, pattern does not match"
+			res.StatusCode = http.StatusOK
+
+			return res, user, nil
 		}
+
 	}
 
 	return res, user, err
