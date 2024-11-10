@@ -24,7 +24,7 @@ func Connection() (*gorm.DB, *sql.DB) {
 		" user=" + os.Getenv("DB_USERNAME") +
 		" password=" + os.Getenv("DB_PASSWORD") +
 		" dbname=" + os.Getenv("DB_DATABASE") +
-		" port=" + os.Getenv("DB_HOST") +
+		" port=" + os.Getenv("DB_PORT") +
 		" sslmode=disable"
 
 	faqserviceDB, err = gorm.Open(postgres.Open(dsn), &gorm.Config{})
