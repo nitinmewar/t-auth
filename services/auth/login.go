@@ -36,6 +36,7 @@ func (h *AuthSvcImpl) LoginUser(ctx *gin.Context, req LoginObject) (models.BaseR
 		return res, user, err
 	}
 
+	fmt.Println(savedProfile)
 	if req.Password != "" {
 		// check password
 		err = h.checkPassword(ctx, req)
@@ -66,6 +67,8 @@ func (h *AuthSvcImpl) LoginUser(ctx *gin.Context, req LoginObject) (models.BaseR
 		keystroke.DeviceInfo = req.TypingDNA.DeviceInfo.Browser
 		keystroke.CreatedFrom = ctx.ClientIP()
 
+		fmt.Println("===================================================")
+		fmt.Println(keystroke)
 		match, similarity, err := compareKeystrokeProfiles(savedProfile, keystroke)
 		fmt.Println(match, similarity, err)
 		if err != nil {

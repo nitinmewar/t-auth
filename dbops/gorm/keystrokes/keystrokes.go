@@ -19,6 +19,7 @@ type GormInterface interface {
 	CreateKeyStroke(ctx *gin.Context, keystroke entities.KeystrokeProfile) (entities.KeystrokeProfile, error)
 	GetKeyStrokeByUserPID(ctx *gin.Context, pid string) (entities.KeystrokeProfile, error)
 	DeletKeyStroke(ctx *gin.Context, pid string) (entities.KeystrokeProfile, error)
+	ListKeyStrokes(ctx *gin.Context) ([]entities.KeystrokeProfile, error)
 }
 
 /* -------------------------------------------------------------------------- */
@@ -52,9 +53,9 @@ func (r *keyStrokeImpl) GetKeyStrokeByUserPID(ctx *gin.Context, pid string) (ent
 
 	db := r.DB.Session(&gorm.Session{})
 
-	result := db.Where("user_pid = ?", pid).
+	result := db.Model(&keystroke).Where("user_pid = ?", pid).
 		Scopes(dbops.DeletedScopes(ctx)).
-		Find(&keystroke)
+		Take(&keystroke)
 	err := result.Error
 	if err != nil {
 		return keystroke, err
@@ -75,4 +76,20 @@ func (r *keyStrokeImpl) DeletKeyStroke(ctx *gin.Context, pid string) (entities.K
 	}
 
 	return keystroke, nil
+}
+
+func (r *keyStrokeImpl) ListKeyStrokes(ctx *gin.Context) ([]entities.KeystrokeProfile, error) {
+	var keystrokes []entities.KeystrokeProfile
+
+	db := r.DB.Session(&gorm.Session{})
+
+	result := db.Model(&entities.KeystrokeProfile{}).
+		Scopes(dbops.DeletedScopes(ctx)).
+		Find(&keystrokes)
+	err := result.Error
+	if err != nil {
+		return keystrokes, err
+	}
+
+	return keystrokes, nil
 }
