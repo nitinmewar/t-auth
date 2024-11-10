@@ -31,6 +31,8 @@ func (h *AuthSvcImpl) LoginUser(ctx *gin.Context, req LoginObject) (models.BaseR
 	db, _ := database.Connection()
 	keystrokeGorm := keystrokes.Gorm(db)
 
+	savedProfiles, err := keystrokeGorm.ListKeyStrokes(ctx)
+	fmt.Println(savedProfiles)
 	savedProfile, err := keystrokeGorm.GetKeyStrokeByUserPID(ctx, user.PID.String)
 	if err != nil {
 		return res, user, err
