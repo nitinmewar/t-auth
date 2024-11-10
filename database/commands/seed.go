@@ -2,7 +2,6 @@ package commands
 
 import (
 	"fmt"
-	"tauth/config"
 	"tauth/constants"
 	"tauth/database"
 	"tauth/database/seeder"
@@ -15,11 +14,6 @@ func Seed() *cobra.Command {
 	return &cobra.Command{
 		Use: constants.Command.SEED,
 		RunE: func(cmd *cobra.Command, args []string) error {
-			if config.App.Env != constants.Environment.LOCAL {
-				fmt.Println("Warning: Environment is not local. Tables wont be seeded")
-				return nil
-			}
-			fmt.Println("App env is local")
 			dbConnection, sqlConnection := database.Connection()
 			defer sqlConnection.Close()
 			begin := dbConnection.Begin()

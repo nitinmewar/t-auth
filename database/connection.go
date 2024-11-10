@@ -3,7 +3,7 @@ package database
 import (
 	"database/sql"
 	"log"
-	"tauth/config"
+	"os"
 	"time"
 
 	"gorm.io/driver/postgres"
@@ -20,11 +20,11 @@ func Connection() (*gorm.DB, *sql.DB) {
 	if faqserviceDB != nil && sqlDB != nil {
 		return faqserviceDB, sqlDB
 	}
-	dsn := "host=" + config.DB.Host +
-		" user=" + config.DB.Username +
-		" password=" + config.DB.Password +
-		" dbname=" + config.DB.Database +
-		" port=" + config.DB.Port +
+	dsn := "host=" + os.Getenv("DB_HOST") +
+		" user=" + os.Getenv("DB_USERNAME") +
+		" password=" + os.Getenv("DB_PASSWORD") +
+		" dbname=" + os.Getenv("DB_DATABASE") +
+		" port=" + os.Getenv("DB_HOST") +
 		" sslmode=disable"
 
 	faqserviceDB, err = gorm.Open(postgres.Open(dsn), &gorm.Config{})

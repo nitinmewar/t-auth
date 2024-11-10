@@ -1,7 +1,6 @@
 package seeder
 
 import (
-	"tauth/config"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -9,7 +8,6 @@ import (
 )
 
 func TestSeeder(t *testing.T) {
-	config.LoadConfigs()
 	db := &gorm.DB{}
 
 	seeds := Seed(db)

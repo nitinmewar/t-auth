@@ -7,7 +7,6 @@ import (
 	"testing"
 	"time"
 
-	"tauth/config"
 	"tauth/constants"
 	"tauth/database"
 	"tauth/entities"
@@ -21,7 +20,6 @@ import (
 /*                                 Create User                                */
 /* -------------------------------------------------------------------------- */
 func TestCreateUser(t *testing.T) {
-	config.LoadConfigs()
 	db, _ := database.Connection()
 	usersGorm := Gorm(db)
 
@@ -64,7 +62,6 @@ func TestCreateUser(t *testing.T) {
 /*                                 Find Email                                 */
 /* -------------------------------------------------------------------------- */
 func TestFindEmail(t *testing.T) {
-	config.LoadConfigs()
 	db, _ := database.Connection()
 	usersGorm := Gorm(db)
 

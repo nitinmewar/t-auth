@@ -1,7 +1,6 @@
 package migrator
 
 import (
-	"tauth/config"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -9,7 +8,6 @@ import (
 )
 
 func TestMigrator(t *testing.T) {
-	config.LoadConfigs()
 	db := &gorm.DB{}
 
 	migrate := AutoMigrate(db)

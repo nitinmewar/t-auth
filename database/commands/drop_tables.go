@@ -3,7 +3,6 @@ package commands
 import (
 	"errors"
 	"fmt"
-	"tauth/config"
 	"tauth/constants"
 	"tauth/database"
 
@@ -14,11 +13,6 @@ func DropTables() *cobra.Command {
 	return &cobra.Command{
 		Use: constants.Command.DROP_TABLES,
 		RunE: func(cmd *cobra.Command, args []string) error {
-			if config.App.Env != constants.Environment.LOCAL {
-				fmt.Println("Warning: Environment is not local. Tables wont be dropped")
-				return nil
-			}
-			fmt.Println("App env is local")
 
 			dbConnection, sqlConnection := database.Connection()
 			defer sqlConnection.Close()
