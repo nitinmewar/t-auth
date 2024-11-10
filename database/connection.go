@@ -20,12 +20,7 @@ func Connection() (*gorm.DB, *sql.DB) {
 	if faqserviceDB != nil && sqlDB != nil {
 		return faqserviceDB, sqlDB
 	}
-	dsn := "host=" + os.Getenv("DB_HOST") +
-		" user=" + os.Getenv("DB_USERNAME") +
-		" password=" + os.Getenv("DB_PASSWORD") +
-		" dbname=" + os.Getenv("DB_DATABASE") +
-		" port=" + os.Getenv("DB_PORT") +
-		" sslmode=disable"
+	dsn := os.Getenv("DB_URL")
 
 	faqserviceDB, err = gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
