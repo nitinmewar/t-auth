@@ -86,10 +86,6 @@ func validateLoginReq(ctx *gin.Context) (authsvc.LoginObject, error) {
 		return reqBody, err
 	}
 
-	if reqBody.Email == "" || reqBody.Password == "" {
-		return reqBody, errors.New("email and password is required")
-	}
-
 	db, _ := database.Connection()
 	usersGorm := users.Gorm(db)
 
