@@ -97,7 +97,7 @@ func (r *usersGormImpl) GetUserDetailsEmail(ctx *gin.Context, email string) (ent
 func (r *usersGormImpl) UpdateKeystrokeMetrics(ctx *gin.Context, pid string) (entities.Users, error) {
 	var user entities.Users
 	db := r.DB.Session(&gorm.Session{})
-	result := db.Where("user_pid = ?", pid).
+	result := db.Model(&user).Where("user_pid = ?", pid).
 		Scopes(dbops.DeletedScopes(ctx)).
 		Update("is_keystroke_calculated", true)
 	err := result.Error
