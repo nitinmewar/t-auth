@@ -1,6 +1,7 @@
 package keystroke
 
 import (
+	"fmt"
 	"tauth/tautherrors"
 	"tauth/utils"
 
@@ -16,6 +17,7 @@ func (h *keyStrokeHandler) CreateKeyStroke(ctx *gin.Context) {
 	}
 
 	res, user, err := h.keystrokeSvc.CreateKeyStroke(ctx, req)
+	fmt.Println(res, err, user)
 	if err != nil {
 		tautherrors.InternalServer(ctx, err.Error())
 		return
