@@ -1,6 +1,7 @@
 package authsvc
 
 import (
+	"fmt"
 	"net/http"
 	"tauth/database"
 	"tauth/dbops/gorm/keystrokes"
@@ -65,7 +66,8 @@ func (h *AuthSvcImpl) LoginUser(ctx *gin.Context, req LoginObject) (models.BaseR
 		keystroke.DeviceInfo = req.TypingDNA.DeviceInfo.Browser
 		keystroke.CreatedFrom = ctx.ClientIP()
 
-		match, _, err := compareKeystrokeProfiles(savedProfile, keystroke)
+		match, similarity, err := compareKeystrokeProfiles(savedProfile, keystroke)
+		fmt.Println(match, similarity, err)
 		if err != nil {
 			return res, user, err
 		}
@@ -87,7 +89,6 @@ func (h *AuthSvcImpl) LoginUser(ctx *gin.Context, req LoginObject) (models.BaseR
 
 	}
 
-	return res, user, err
 }
 
 func (h *AuthSvcImpl) checkPassword(c *gin.Context, req LoginObject) error {
